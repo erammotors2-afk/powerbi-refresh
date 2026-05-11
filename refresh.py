@@ -23,6 +23,10 @@ token_response = app.acquire_token_for_client(
     scopes=["https://analysis.windows.net/powerbi/api/.default"]
 )
 
+if "access_token" not in token_response:
+    print(token_response)
+    exit()
+
 access_token = token_response["access_token"]
 
 headers = {
