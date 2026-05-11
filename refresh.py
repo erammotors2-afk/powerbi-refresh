@@ -8,8 +8,7 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 DATASETS = [
-    "acba31c4-8014-4c55-92e4-f8020ca8c5ca",
-    "84e646d6-51a0-497d-8314-8343e1aa7ca2"
+    "acba31c4-8014-4c55-92e4-f8020ca8c5ca"
 ]
 
 authority = f"https://login.microsoftonline.com/{TENANT_ID}"
@@ -49,5 +48,27 @@ for dataset_id in DATASETS:
     print("Status:", response.status_code)
     print("Response:", response.text)
 
-    # WAIT 2 MINUTES
-    time.sleep(120)
+    # If rate limited
+    if response.status_code == 429:
+
+        retry_after = 120
+
+        try:
+            retry_after = int(
+                response.text.split("Retry in ")[1].split(" ")[0]
+            )
+        except:
+            pass
+
+        print(f"Waiting {retry_after} seconds...")
+
+        time.sleep(retry_after)
+
+        retry_response = requests.post(
+            refresh_url,
+            headers=headers,
+            json={}
+        )
+
+        print("Retry Status:", retry_response.status_code)
+        print("Retry Response:", retry_response.text)
