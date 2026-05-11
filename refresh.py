@@ -32,6 +32,25 @@ headers = {
     "Content-Type": "application/json"
 }
 
+# =========================
+# GET DATASETS FIRST
+# =========================
+datasets_url = (
+    f"https://api.powerbi.com/v1.0/myorg/groups/"
+    f"{WORKSPACE_ID}/datasets"
+)
+
+datasets_response = requests.get(
+    datasets_url,
+    headers=headers
+)
+
+print(datasets_response.status_code)
+print(datasets_response.text)
+
+# =========================
+# REFRESH DATASETS
+# =========================
 for dataset_id in DATASETS:
 
     refresh_url = (
@@ -41,7 +60,8 @@ for dataset_id in DATASETS:
 
     response = requests.post(
         refresh_url,
-        headers=headers
+        headers=headers,
+        json={}
     )
 
     print("\n===================")
