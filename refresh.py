@@ -48,27 +48,8 @@ for dataset_id in DATASETS:
     print("Status:", response.status_code)
     print("Response:", response.text)
 
-    # If rate limited
-    if response.status_code == 429:
+    if response.status_code == 202:
+        print("Refresh started successfully")
 
-        retry_after = 120
-
-        try:
-            retry_after = int(
-                response.text.split("Retry in ")[1].split(" ")[0]
-            )
-        except:
-            pass
-
-        print(f"Waiting {retry_after} seconds...")
-
-        time.sleep(retry_after)
-
-        retry_response = requests.post(
-            refresh_url,
-            headers=headers,
-            json={}
-        )
-
-        print("Retry Status:", retry_response.status_code)
-        print("Retry Response:", retry_response.text)
+    elif response.status_code == 429:
+        print("Rate limited. Wait before retrying.")
