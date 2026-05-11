@@ -1,4 +1,5 @@
 import os
+import time
 import requests
 from msal import ConfidentialClientApplication
 
@@ -22,10 +23,6 @@ app = ConfidentialClientApplication(
 token_response = app.acquire_token_for_client(
     scopes=["https://analysis.windows.net/powerbi/api/.default"]
 )
-
-if "access_token" not in token_response:
-    print(token_response)
-    exit()
 
 access_token = token_response["access_token"]
 
@@ -51,3 +48,6 @@ for dataset_id in DATASETS:
     print("Dataset:", dataset_id)
     print("Status:", response.status_code)
     print("Response:", response.text)
+
+    # WAIT 2 MINUTES
+    time.sleep(120)
