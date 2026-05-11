@@ -1,6 +1,6 @@
 import os
-import time
 import requests
+import time
 from msal import ConfidentialClientApplication
 
 TENANT_ID = os.getenv("TENANT_ID")
@@ -32,22 +32,21 @@ headers = {
 }
 
 for dataset_id in DATASETS:
-
     refresh_url = (
         f"https://api.powerbi.com/v1.0/myorg/"
         f"datasets/{dataset_id}/refreshes"
     )
-
-    response = requests.post(
-        refresh_url,
-        headers=headers,
-        json={}
-    )
-
+    
+    response = requests.post(refresh_url, headers=headers, json={})
+    
     print("\n===================")
     print("Dataset:", dataset_id)
     print("Status:", response.status_code)
     print("Response:", response.text)
-
-    # WAIT 2 MINUTES
-    time.sleep(120)
+    
+    # Wait 2 minutes before next request
+    if response.status_code == 429:
+        print("Rate limited. Waiting 120 seconds...")
+        time.sleep(120)
+    else:
+        time.sleep(30)  # Even for successful requests, be respectful
