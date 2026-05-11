@@ -6,8 +6,6 @@ TENANT_ID = os.getenv("TENANT_ID")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
-WORKSPACE_ID = "553aabb5-491d-4d52-9ac6-8f66ba542ef6"
-
 DATASETS = [
     "acba31c4-8014-4c55-92e4-f8020ca8c5ca",
     "84e646d6-51a0-497d-8314-8343e1aa7ca2"
@@ -32,30 +30,11 @@ headers = {
     "Content-Type": "application/json"
 }
 
-# =========================
-# GET DATASETS FIRST
-# =========================
-datasets_url = (
-    f"https://api.powerbi.com/v1.0/myorg/groups/"
-    f"{WORKSPACE_ID}/datasets"
-)
-
-datasets_response = requests.get(
-    datasets_url,
-    headers=headers
-)
-
-print(datasets_response.status_code)
-print(datasets_response.text)
-
-# =========================
-# REFRESH DATASETS
-# =========================
 for dataset_id in DATASETS:
 
     refresh_url = (
-        f"https://api.powerbi.com/v1.0/myorg/groups/"
-        f"{WORKSPACE_ID}/datasets/{dataset_id}/refreshes"
+        f"https://api.powerbi.com/v1.0/myorg/"
+        f"datasets/{dataset_id}/refreshes"
     )
 
     response = requests.post(
